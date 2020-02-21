@@ -47,6 +47,24 @@ class App extends React.Component {
         });
     };
 
+    updateFish = (key, updatedFish) => {
+        // take copy of current state
+        const fishes = {...this.state.fishes}; 
+        // add new fish to fishes variable
+        fishes[key] = updatedFish;
+        // set new fishes object to state 
+        this.setState({ fishes });
+    }
+
+    deleteFish = (key) => {
+        // copy of state 
+        const fishes = {...this.state.fishes}; 
+        // remove item from state 
+        fishes[key] = null;
+        // update state 
+        this.setState({ fishes });
+    }
+
     loadSampleFishes = () => {
         this.setState({ fishes: sampleFishes })
     };
@@ -61,6 +79,15 @@ class App extends React.Component {
             order: order
         });
     };
+
+    removeFromOrder = (key) => {
+        const order = { ...this.state.order }; 
+        // because we don't mirror with firebase we can write delete
+        delete order[key];
+        this.setState({
+            order: order
+        });
+    }
     
     render() {
         return (
@@ -78,12 +105,16 @@ class App extends React.Component {
                 <Order 
                 fishes={this.state.fishes}
                 order={this.state.order}
+                removeFromOrder={this.removeFromOrder}
                 // {...this.state}
                 // OR spread but passing all the data 
                 />
                 <Inventory 
                 addFish={this.addFish} 
+                updateFish = {this.updateFish} 
+                deleteFish = {this.deleteFish} 
                 loadSampleFishes={this.loadSampleFishes}
+                fishes={this.state.fishes}
                 />
             </div>
         );
